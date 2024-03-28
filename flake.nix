@@ -35,16 +35,6 @@
     # community wayland nixpkgs
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
 
-    # Prettier formatter for nix
-    alejandra.url = "github:kamadorueda/alejandra/3.0.0";
-    alejandra.inputs.nixpkgs.follows = "nixpkgs";
-
-    #Autofirma flakes
-    autofirma-nix = {
-      url = "github:nilp0inter/autofirma-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # TODO Set secrets management for the future
     #agenix.url = "github:ryantm/agenix/0d8c5325fc81daf00532e3e26c6752f7bcde1143";
     #mysecrets = { url = "git+ssh://git@github.com/ryan4yin/nix-secrets.git?shallow=1"; flake = false; };
@@ -59,18 +49,17 @@
     self,
     nixpkgs,
     home-manager,
-    alejandra,
-    autofirma-nix,
     ...
   }: let
     x64_system = "x86_64-linux";
     x64_specialArgs =
       {
-       # Use the unstable channel for some packages
-#        pkgs-unstable = import inputs.nixpkgs-unstable {
-#          system = x64_system;
-#          config.allowUnfree = true;
-#        };
+        # Use the unstable channel for some packages
+        pkgs-unstable = import inputs.nixpkgs-unstable {
+          system = x64_system;
+          config.allowUnfree = true;
+        };
+
       }
       // inputs;
     # Set the laptop configuration
@@ -84,26 +73,25 @@
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.backupFileExtension = "backup";
-        home-manager.extraSpecialArgs = x64_specialArgs ;
+        home-manager.extraSpecialArgs = x64_specialArgs;
         home-manager.users.amerino = import ./home/desktop-hyprland.nix;
+        
       }
+    ];
+    server_modules = [
+      ./host/server
+      ./modules/containers
+
+      home-manager.nixosModules.home-manager
       {
-        environment.systemPackages = [alejandra.defaultPackage.${x64_system}];
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.backupFileExtension = "backup";
+        home-manager.extraSpecialArgs = x64_specialArgs;
+        home-manager.users.amerino = import ./home/desktop-basic.nix;
+        
       }
     ];
-  server_modules = [
-	./host/server
-    
-	home-manager.nixosModules.home-manager{
-	  home-manager.useGlobalPkgs = true;
-    home-manager.useUserPackages = true;
-    home-manager.backupFileExtension = "backup";
-    home-manager.extraSpecialArgs = x64_specialArgs;
-    home-manager.users.amerino = import ./home/desktop-basic.nix;
-	}
-    ];
-
-
   in {
     nixosConfigurations = let
       system = x64_system;
@@ -111,15 +99,13 @@
     in {
       laptop = nixpkgs.lib.nixosSystem {
         inherit system specialArgs;
-        modules = [
-        autofirma-nix.homeManagerModules.default
-        laptop_modules
-         ];
-    };
+        modules = laptop_modules;
+      };
       server = nixpkgs.lib.nixosSystem {
         inherit system specialArgs;
         modules = server_modules;
       };
-      };
+
+    };
   };
 }

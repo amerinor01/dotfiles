@@ -15,12 +15,12 @@
     # Comunication
     thunderbird
     station # I need to upload
-    teams
+
     telegram-desktop
 
     # remote desktop
     anydesk
- #   rustdesk
+    #   rustdesk
 
     # Audio
     wireplumber
@@ -31,11 +31,11 @@
     tldr
     exa
     killall
-    
+
     #Productivity
     logseq
     emacs
-    teams-for-linux   
+    teams-for-linux
     # Security
     bitwarden
   ];

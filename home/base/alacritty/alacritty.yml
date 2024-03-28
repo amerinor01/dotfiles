@@ -26,7 +26,7 @@ window:
     columns: 100
     lines: 85
 
-  # Window padding (changes require restart)
+  # Window padding (changes require resscrolltart)
   #
   # Blank space added around the window in pixels. This padding is not scaled by
   # DPI and the specified value is always added at both opposing sides.
@@ -63,7 +63,7 @@ window:
 scrolling:
   # maximum number of lines in the scrollback buffer. Specifying '0' will
   # disable scrolling.
-  history: 0
+  history: 1000
 
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
