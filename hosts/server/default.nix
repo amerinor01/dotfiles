@@ -9,9 +9,8 @@
 {
   imports = [
     ./hardware-configuration.nix
-    
     ../../modules/users.nix
-    ../../modules/containers
+    #../../modules/containers
   ];
 
     boot.supportedFilesystems = [
@@ -36,12 +35,9 @@
   networking = {
     hostName = "server";
     wireless.enable = false; # Enables wireless support via wpa_supplicant.
-
-    networkmanager.enable = true;
-
     enableIPv6 = false; # disable ipv6
 };
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "24.05";
 
 }
