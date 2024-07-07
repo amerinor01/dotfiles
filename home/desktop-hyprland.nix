@@ -3,7 +3,7 @@ let name = "amerino";
 in
 {
   imports = [
-    ./base
+#    ./base
     ./desktop
     ./hyprland
   ];

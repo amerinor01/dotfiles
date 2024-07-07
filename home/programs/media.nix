@@ -12,26 +12,26 @@
     viu # Terminal image viewer with native support for iTerm and Kitty
     imagemagick
     graphviz
-    imv # simple image viewer
+    #imv # simple image viewer
 
     # video
-    vlc
+    #ivlc
 
     # audio control
-    pavucontrol
-    playerctl
-    pulsemixer
+    #pavucontrol
+    #playerctl
+    #pulsemixer
   ];
 
-  programs = {
-    mpv = {
-      enable = true;
-      defaultProfiles = ["gpu-hq"];
-      scripts = [pkgs.mpvScripts.mpris];
-    };
-  };
+  #programs = {
+  #  mpv = {
+  #    enable = true;
+  #    defaultProfiles = ["gpu-hq"];
+  #    scripts = [pkgs.mpvScripts.mpris];
+  #  };
+  #};
 
-  services = {
-    playerctld.enable = true;
-  };
+  #services = {
+  #  playerctld.enable = true;
+  #};
 }

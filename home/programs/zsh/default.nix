@@ -7,6 +7,9 @@
   programs.zsh = {
     enable = true;
     dotDir = ".config/zsh";
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
     history = {
       save = 10000;
       size = 10000;
@@ -36,8 +39,31 @@
     '';
    oh-my-zsh = {
     enable = true;
-    plugins = [ "git" "thefuck" ];
+    plugins = [ "git" ];
     theme = "robbyrussell";
   };
+
+ plugins = [
+    {
+      # will source zsh-autosuggestions.plugin.zsh
+      name = "nix-zsh-completions";
+      src = pkgs.fetchFromGitHub {
+        owner = "zsh-community";
+        repo = "nix-zsh-completions";
+        rev = "refs/tags/0.5.1";
+        hash = "sha256-bgbMc4HqigqgdkvUe/CWbUclwxpl17ESLzCIP8Sz+F8=";
+      };
+    }
+    {
+      name = "enhancd";
+      file = "init.sh";
+      src = pkgs.fetchFromGitHub {
+        owner = "b4b4r07";
+        repo = "enhancd";
+        rev = "v2.2.1";
+        sha256 = "0iqa9j09fwm6nj5rpip87x3hnvbbz9w9ajgm6wkrd5fls8fn8i5g";
+      };
+    }
+  ];  
   };
 }

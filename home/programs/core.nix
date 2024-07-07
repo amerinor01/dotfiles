@@ -34,7 +34,10 @@
     usbutils
     hdparm
     dmidecode
+    helix
+    file
 
+    nixfmt-rfc-style #A formatter for Nix code, intended to easily apply a uniform style. TODO: change to nixfmt when enable
   ];
 
     programs.skim = {	# Fuzzy finder
@@ -42,4 +45,7 @@
       enableBashIntegration = true;
     };
 
+    programs.atuin = {
+      enable = true;
+    };
 }

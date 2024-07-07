@@ -1,12 +1,13 @@
 {self, ...}:
-let name = "amerino";
+let 
+  name = "amerino";
 in
 {
   imports = [
-    ./base
+    ./programs
   ];
 
-  home = {
+  home= {
     username = name;
     homeDirectory = "/home/${name}";
     stateVersion = "24.05";
