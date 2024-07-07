@@ -1,16 +1,16 @@
 {pkgs, ...}: {
   imports = [
     #		./nginx
-    #./streaming
+    ./streaming
     #./nextcloud
-    ./vaultwarden
+    #./vaultwarden
   ];
 
-  networking.nat = {
-    enable = true;
-    internalInterfaces = ["ve-+"];
-    externalInterface = "ens3";
-  };
+  #networking.nat = {
+  #  enable = true;
+  #  internalInterfaces = ["ve-+"];
+  #  externalInterface = "ens3";
+  #};
 
-  virtualisation.docker.enable = true;
+  #virtualisation.docker.enable = true;
 }

@@ -26,7 +26,7 @@
   nix.settings.auto-optimise-store = true;
 
   # enable flakes globally
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  #nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = lib.mkDefault true;
@@ -39,26 +39,26 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "es_ES.UTF-8";
-    LC_IDENTIFICATION = "es_ES.UTF-8";
-    LC_MEASUREMENT = "es_ES.UTF-8";
-    LC_MONETARY = "es_ES.UTF-8";
-    LC_NAME = "es_ES.UTF-8";
-    LC_NUMERIC = "es_ES.UTF-8";
-    LC_PAPER = "es_ES.UTF-8";
-    LC_TELEPHONE = "es_ES.UTF-8";
-    LC_TIME = "es_ES.UTF-8";
+    LC_ADDRESS = "en_US.UTF-8";
+    LC_IDENTIFICATION = "en_US.UTF-8";
+    LC_MEASUREMENT = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
+    LC_NAME = "en_US.UTF-8";
+    LC_NUMERIC = "en_US.UTF-8";
+    LC_PAPER = "en_US.UTF-8";
+    LC_TELEPHONE = "en_US.UTF-8";
+    LC_TIME = "en_US.UTF-8";
   };
 
   # TODO review if i need this config since i using hyprland
   # Configure keymap in X11
-  services.xserver = {
-    layout = "es";
-    xkbVariant = "";
-  };
+  #services.xserver = {
+   # layout = "es";
+   # xkbVariant = "";
+  #};
 
   # Configure console keymap
-  console.keyMap = "es";
+ # console.keyMap = "es";
 
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -71,9 +71,9 @@
     settings = {
       X11Forwarding = true;
       PermitRootLogin = "no"; # disable root login
-      PasswordAuthentication = false; # disable password login
+      PasswordAuthentication = true; # disable password login
     };
-    openFirewall = true;
+    openFirewall = false;
   };
 
   #programs.ssh.extraConfig = builtins.readFile ./dotfiles/ssh/config;
@@ -85,16 +85,16 @@
     wget
     curl
     git # used by nix flakes
-    git-lfs # used by huggingface models
     bash
     zsh
     rar
+    searxng
   ];
   # replace default editor with neovim
   environment.variables.EDITOR = "nvim";
-  
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.package = pkgs.bluezFull;
+  services.tailscale.enable = true;  
+ # hardware.bluetooth.enable = true;
+ # hardware.bluetooth.package = pkgs.bluezFull;
 
   # for power management
   services.power-profiles-daemon.enable = true;
@@ -102,4 +102,16 @@
 
   # Enable zsh at system level
   programs.zsh.enable = true;
+
+
+  services.searx = {
+    enable = true;
+    settings = {
+      server = {
+        port = 8888;
+        bind_address = "127.0.0.1";
+        secret_key = "foo";
+      };
+    };
+  };
 }

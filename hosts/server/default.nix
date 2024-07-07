@@ -10,7 +10,8 @@
   imports = [
     ./hardware-configuration.nix
     ../../modules/users.nix
-    #../../modules/containers
+    ../../modules/system-core.nix
+    ../../modules/containers
   ];
 
     boot.supportedFilesystems = [
@@ -28,10 +29,13 @@
   # Use the GRUB 2 boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  
+ 
+# Enable binfmt emulation.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" "riscv64-linux" ];
+    
   #Set the number of snapshots to max 10
   boot.loader.systemd-boot.configurationLimit = 10;
-
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   networking = {
     hostName = "server";
     wireless.enable = false; # Enables wireless support via wpa_supplicant.

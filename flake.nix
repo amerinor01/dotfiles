@@ -3,14 +3,14 @@
 
   # the nixConfig here only affects the flake itself, not the system configuration!
   nixConfig = {
-    experimental-features = ["nix-command" "flakes"];
+    experimental-features = [ "nix-command" "flakes" ];
   };
 
   # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
   # Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.
   inputs = {
     # Default nixos-unstable packages
-    nixpkgs.url = "nixpkgs/nixos-23.05";
+    nixpkgs.url = "nixpkgs/nixos-24.05";
 
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
@@ -19,7 +19,7 @@
 
     # Home manager set the configuration for the users
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.05";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -36,8 +36,8 @@
     nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
 
     # TODO Set secrets management for the future
-    #agenix.url = "github:ryantm/agenix/0d8c5325fc81daf00532e3e26c6752f7bcde1143";
-    #mysecrets = { url = "git+ssh://git@github.com/ryan4yin/nix-secrets.git?shallow=1"; flake = false; };
+    sops-nix.url = "github:Mic92/sops-nix";
+
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -45,15 +45,26 @@
   # parameters in `outputs` are defined in `inputs` and can be referenced by their names.
   # However, `self` is an exception, this special parameter points to the `outputs` itself (self-reference)
   # The `@` syntax here is used to alias the attribute set of the inputs's parameter, making it convenient to use inside the function.
-  outputs = inputs @ {
-    self,
-    nixpkgs,
-    home-manager,
-    ...
-  }: let
-    x64_system = "x86_64-linux";
-    x64_specialArgs =
-      {
+  outputs =
+    inputs @ { self
+    , nixpkgs
+    , home-manager
+    , sops-nix
+    , ...
+    }:
+    let
+      commonHomeManager = { user, importPath, specialArgs }:
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            backupFileExtension = "backup";
+            users.${user} = import importPath;
+          };
+        };
+
+      x64_system = "x86_64-linux";
+      x64_specialArgs = {
         # Use the unstable channel for some packages
         pkgs-unstable = import inputs.nixpkgs-unstable {
           system = x64_system;
@@ -62,50 +73,50 @@
 
       }
       // inputs;
-    # Set the laptop configuration
-    laptop_modules = [
-      ./hosts/laptop
-      ./modules/hyprland.nix
-      ./modules/containers
+      # Set the laptop configuration
+      laptop_modules = [
+        ./hosts/laptop
+        ./modules/hyprland.nix
+        ./modules/containers
 
-      home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "backup";
-        home-manager.extraSpecialArgs = x64_specialArgs;
-        home-manager.users.amerino = import ./home/desktop-hyprland.nix;
-        
-      }
-    ];
-    server_modules = [
-      ./host/server
-      ./modules/containers
+        home-manager.nixosModules.home-manager
+        (commonHomeManager {
+          user = "amerino";
+          importPath = ./home/hyperland-desktop.nix;
+          specialArgs = x64_specialArgs;
+        })
 
-      home-manager.nixosModules.home-manager
-      {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.backupFileExtension = "backup";
-        home-manager.extraSpecialArgs = x64_specialArgs;
-        home-manager.users.amerino = import ./home/desktop-basic.nix;
-        
-      }
-    ];
-  in {
-    nixosConfigurations = let
-      system = x64_system;
-      specialArgs = x64_specialArgs;
-    in {
-      laptop = nixpkgs.lib.nixosSystem {
-        inherit system specialArgs;
-        modules = laptop_modules;
-      };
-      server = nixpkgs.lib.nixosSystem {
-        inherit system specialArgs;
-        modules = server_modules;
-      };
+      ];
+      server_modules = [
+        ./hosts/server
+        sops-nix.nixosModules.sops
 
+        #Home Manager config
+        home-manager.nixosModules.home-manager
+        (commonHomeManager {
+          user = "amerino";
+          importPath = ./home/home-basic.nix;
+          specialArgs = x64_specialArgs;
+        })
+
+      ];
+    in
+    {
+      nixosConfigurations =
+        let
+          system = x64_system;
+          specialArgs = x64_specialArgs;
+        in
+        {
+          laptop = nixpkgs.lib.nixosSystem {
+            inherit system specialArgs;
+            modules = laptop_modules;
+          };
+          server = nixpkgs.lib.nixosSystem {
+            inherit system specialArgs;
+            modules = server_modules;
+          };
+
+        };
     };
-  };
 }
