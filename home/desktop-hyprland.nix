@@ -6,6 +6,7 @@ in
 #    ./base
     ./desktop
     ./hyprland
+    ./programs
   ];
 
   home = {
