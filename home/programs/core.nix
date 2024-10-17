@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   home.packages = with pkgs; [
 
     # archives
@@ -34,18 +34,24 @@
     usbutils
     hdparm
     dmidecode
-    helix
+    helix # Modern vi alternative
     file
 
+    tmux # a terminal multiplexer
+    nerdfonts # Fonts for everyone
+    tldr
+    emacs
     nixfmt-rfc-style #A formatter for Nix code, intended to easily apply a uniform style. TODO: change to nixfmt when enable
   ];
 
-    programs.skim = {	# Fuzzy finder
-      enable = true;
-      enableBashIntegration = true;
-    };
+  programs.skim = {
+    # Fuzzy finder
+    enable = true;
+    enableBashIntegration = true;
+  };
 
-    programs.atuin = {
-      enable = true;
-    };
+  programs.atuin = {
+    enable = true;
+  };
+
 }

@@ -1,14 +1,11 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ lib
+, ...
 }: {
   # `programs.git` will generate the config file: ~/.config/git/config
   # to make git use this config file, `~/.gitconfig` should not exist!
   #
   #    https://git-scm.com/docs/git-config#Documentation/git-config.txt---global
-  home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+  home.activation.removeExistingGitconfig = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     rm -f ~/.gitconfig
   '';
 
@@ -18,14 +15,6 @@
 
     userName = "Alberto Merino";
     userEmail = "amerinor01@gmail.com";
-
-    includes = [
-      {
-        # use diffrent email & name for work
-        path = "~/work/.gitconfig";
-        condition = "gitdir:~/work/";
-      }
-    ];
 
     extraConfig = {
       init.defaultBranch = "master";
@@ -44,12 +33,12 @@
           insteadOf = "https://gitraap.i3a.info";
         };
       };
-    };
 
-    # signing = {
-    #   key = "xxx";
-    #   signByDefault = true;
-    # };
+      # Sign all commits using ssh key
+      commit.gpgsign = true;
+      gpg.format = "ssh";
+      user.signingkey = "~/.ssh/id_ed25519.pub";
+    };
 
     delta = {
       enable = true;

@@ -38,6 +38,7 @@
     # TODO Set secrets management for the future
     sops-nix.url = "github:Mic92/sops-nix";
 
+    hosts.url = "github:StevenBlack/hosts";
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -50,6 +51,7 @@
     , nixpkgs
     , home-manager
     , sops-nix
+    , hosts
     , ...
     }:
     let
@@ -89,13 +91,18 @@
       ];
       server_modules = [
         ./hosts/server
+        ./modules/hyprland.nix
         sops-nix.nixosModules.sops
+        hosts.nixosModule
+        {
+          networking.stevenBlackHosts.enable = true;
+        }
 
         #Home Manager config
         home-manager.nixosModules.home-manager
         (commonHomeManager {
           user = "amerino";
-          importPath = ./home/home-basic.nix;
+          importPath = ./home/desktop-hyprland.nix;
           specialArgs = x64_specialArgs;
         })
 

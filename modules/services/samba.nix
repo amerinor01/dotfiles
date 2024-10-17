@@ -17,7 +17,7 @@
     '';
     shares = {
       public = {
-        path = "/mnt/Shares/Public";
+        path = "/home/amerino/Sync/D";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "yes";

@@ -1,39 +1,41 @@
-{
-  pkgs,
-  config,
-  ...
+{ pkgs
+, config
+, ...
 }: {
-  
+
   programs = {
-    #autofirma.enable = true;
-    #autofirma.firefoxIntegration.profiles = {
-    #  amerino = {
-    #    enable = true;
-    #  };
-    #};
+    # Tool to signs documents in spain
+#    autofirma = {
+#      enable = true;
 
-    #autofirma-nix.dniremote.enable = true;
+#      firefoxIntegration.profiles = {
+#        amerino.enable = true;
+#      };
+#    };
 
-    #configuradorfnmt.enable = true;
-    #configuradorfnmt.firefoxIntegration.profiles = {
-    #  amerino = {
-    #    enable = true;
-    #  };
-    #};
+    # Tool to update digital signs from spain
+#    configuradorfnmt = {
+#      enable = true;
+#      firefoxIntegration.profiles = {
+#        amerino.enable = true;
+#      };
+#    };
 
+    # Enable firefox to use autofirma and DNI digital
     firefox = {
       enable = true;
-      enableGnomeExtensions = false;
-      #policies = {
-      #  SecurityDevices = {
-      #"OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so"; # Para poder utilizar el DNIe, y otras tarjetas inteligentes
-      #"DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so"; # Para poder utilizar el DNIe por NFC desde un móvil Android
-      #  };
-      #};
-
-      profiles.amerino = {
-        id = 0;
+      profiles = {
+        amerino.id = 0;
       };
+
+      enableGnomeExtensions = false;
+      policies = {
+        SecurityDevices = {
+#          "OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so"; # Para poder utilizar el DNIe, y otras tarjetas inteligentes
+#          "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so"; # Para poder utilizar el DNIe por NFC desde un móvil Android
+        };
+      };
+
     };
   };
 }

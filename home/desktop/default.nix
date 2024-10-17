@@ -6,7 +6,7 @@
 
   home.packages = with pkgs; [
     # GUI apps
-    firefox
+#    firefox
     youtube-music
 
     # e-book
@@ -29,7 +29,7 @@
 
     # Cli apps
     tldr
-    exa
+    
     killall
 
     #Productivity

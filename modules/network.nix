@@ -6,6 +6,6 @@
       "1.1.1.1" # CLoudfare DNS 
       "9.9.9.9" # Quad9 DNS
     ];
-    fireall.enable = false;
+    firewall.enable = false;
   };
 }

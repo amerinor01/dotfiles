@@ -3,10 +3,10 @@
 , ...
 }:
 {
-  # Enable the OpenSSH daemon.
   services = {
     tailscale.enable = true;
-    # for power management
+
+    gitlab-runner.enable = true;
   };
 
 }

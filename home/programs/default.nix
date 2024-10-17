@@ -1,10 +1,6 @@
 {...}: {
   imports = [
-    #./bat
     ./zsh
-    #./alacritty
-    #./lazyvim
-    
     ./media.nix
     ./shell.nix
     ./system-tools.nix
@@ -12,5 +8,6 @@
     ./bash.nix
     ./git.nix
 
+    ./alacritty
   ];
 }

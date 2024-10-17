@@ -1,7 +1,6 @@
-{
-  pkgs,
-  config,
-  ...
+{ pkgs
+, config
+, ...
 }:
 # processing audio/video
 {
@@ -20,8 +19,8 @@
   programs = {
     mpv = {
       enable = true;
-      defaultProfiles = ["gpu-hq"];
-      scripts = [pkgs.mpvScripts.mpris];
+      defaultProfiles = [ "gpu-hq" ];
+      scripts = [ pkgs.mpvScripts.mpris ];
     };
   };
 

@@ -1,6 +1,6 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   imports = [
-    #		./nginx
+    ./nginx
     ./streaming
     #./nextcloud
     #./vaultwarden
@@ -12,5 +12,5 @@
   #  externalInterface = "ens3";
   #};
 
-  #virtualisation.docker.enable = true;
+  virtualisation.docker.enable = true;
 }
