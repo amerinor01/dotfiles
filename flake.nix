@@ -9,9 +9,10 @@
   # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
   # Each item in `inputs` will be passed as a parameter to the `outputs` function after being pulled and built.
   inputs = {
-    # Default nixos-unstable packages
+    # Default nixos-stable packages
     nixpkgs.url = "nixpkgs/nixos-24.05";
 
+    # Also add the Nixpkgs unstable for some updated packages
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     # Set the hardware configurations
@@ -23,10 +24,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Modern WM with wayland
     hyprland = {
       url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
+   
+    # Also functionallity from most of hyprland such the screenshot tools...
     hyprwm-contrib = {
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,7 +42,15 @@
     # TODO Set secrets management for the future
     sops-nix.url = "github:Mic92/sops-nix";
 
+    #File to block most of the stuff avoidable online
     hosts.url = "github:StevenBlack/hosts";
+
+    autofirma-nix = {
+      url = "github:nilp0inter/autofirma-nix/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -52,6 +64,7 @@
     , home-manager
     , sops-nix
     , hosts
+    , autofirma-nix
     , ...
     }:
     let
@@ -72,6 +85,7 @@
           system = x64_system;
           config.allowUnfree = true;
         };
+#        autofirma = autofirma-nix.homeManagerModules.default;
 
       }
       // inputs;
@@ -94,6 +108,23 @@
         ./modules/hyprland.nix
         sops-nix.nixosModules.sops
         hosts.nixosModule
+        # This is awfull, let me fix later on.
+        autofirma-nix.nixosModules.default
+        ({ pkgs, config, ...}: {
+          programs.autofirma.enable = true;
+          programs.autofirma.fixJavaCerts = true;
+          programs.autofirma.firefoxIntegration.enable = true;
+          
+          programs.configuradorfnmt.enable = true;
+          programs.configuradorfnmt.firefoxIntegration.enable = true;
+
+          programs.firefox.enable = true;
+          programs.firefox.policies = {
+            SecurityDevices = {
+              "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+            };
+          };
+        })
         {
           networking.stevenBlackHosts.enable = true;
         }
