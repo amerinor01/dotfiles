@@ -23,6 +23,7 @@
     nnn # terminal file manager
     glow # markdown previewer in terminal
 
+    lshw
     # Security   
     gnupg
 

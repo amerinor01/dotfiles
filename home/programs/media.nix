@@ -2,7 +2,6 @@
   pkgs,
   ...
 }:
-# processing audio/video
 {
   home.packages = with pkgs; [
     ffmpeg-full
@@ -11,9 +10,9 @@
     viu # Terminal image viewer with native support for iTerm and Kitty
     imagemagick
     graphviz
-    #imv # simple image viewer
+    imv # simple image viewer
     # video
-    #ivlc
+    # ivlc
 
     # audio control
     #pavucontrol

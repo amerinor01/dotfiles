@@ -15,9 +15,6 @@
     # Default nixos-stable packages
     nixpkgs.url = "nixpkgs/nixos-24.05";
 
-    # Also add the Nixpkgs unstable for some updated packages
-    #nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
-
     # Set the hardware configurations
     nixos-hardware.url = "github:nixos/nixos-hardware";
 
@@ -39,10 +36,6 @@
     };
 
     nixvim.url = "github:elythh/nixvim";
-    screenpad-driver = {
-      url = "github:MatthewCash/asus-wmi-screenpad-module";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
   };
 
@@ -103,19 +96,16 @@
       ];
 
       zen_modules = [
-        ./hosts/zen
-        ./modules/hyprland.nix
-
-        autofirma-nix.nixosModules
-        ./modules/autofirma.nix
-        nixos-hardware.nixosModules.Asus-Zenbook-Pro-15-UX535
-        #sops-nix.nixosModules.sops
+        nixos-hardware.nixosModules.common-gpu-nvidia-disable
+        autofirma-nix.nixosModules.default
         hosts.nixosModule
-        {
-          networking.stevenBlackHosts.enable = true;
-        }
-        #Home Manager config
         home-manager.nixosModules.home-manager
+        ./hosts/zen
+        ./modules/i3.nix
+        ./modules/autofirma.nix
+        ###ixos-hardware.nixosModules.asus-zenbook-ux535
+        #sops-nix.nixosModules.sops
+        #Home Manager config
         (commonHomeManager {
           user = "amerino";
           importPath = ./home/desktop-hyprland.nix;

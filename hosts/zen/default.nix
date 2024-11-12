@@ -14,6 +14,8 @@
     ../../modules/fhs-fonts.nix
     ../../modules/core-desktop.nix
     ../../modules/users.nix
+    ../../modules/firefox.nix
+    ../../modules/services/adguard.nix
   ];
 
   boot = {
