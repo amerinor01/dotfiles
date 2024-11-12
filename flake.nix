@@ -39,6 +39,10 @@
     };
 
     nixvim.url = "github:elythh/nixvim";
+    screenpad-driver = {
+      url = "github:MatthewCash/asus-wmi-screenpad-module";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
@@ -53,6 +57,7 @@
       home-manager,
       hosts,
       autofirma-nix,
+      nixos-hardware,
       ...
     }:
     let
@@ -103,7 +108,7 @@
 
         autofirma-nix.nixosModules
         ./modules/autofirma.nix
-
+        nixos-hardware.nixosModules.Asus-Zenbook-Pro-15-UX535
         #sops-nix.nixosModules.sops
         hosts.nixosModule
         {
