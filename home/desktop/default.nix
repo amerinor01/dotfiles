@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   imports = [
     #./ssh.nix Need to be configured, but safety is important
     ./xdg.nix
@@ -6,10 +7,8 @@
 
   home.packages = with pkgs; [
     # GUI apps
-#    firefox
+    #    firefox
     youtube-music
-
-    # e-book
     foliate # do not support .pdf
 
     # Comunication
@@ -19,23 +18,16 @@
     telegram-desktop
 
     # remote desktop
-    anydesk
-    #   rustdesk
+    remmina
 
     # Audio
     wireplumber
     helvum
     noisetorch
 
-    # Cli apps
-    tldr
-    
-    killall
-
     #Productivity
-    logseq
-    emacs
     teams-for-linux
+
     # Security
     bitwarden
   ];

@@ -1,8 +1,5 @@
-{ pkgs, ... }: {
-  imports = [
-    ./wayland-apps.nix
-  ];
-
+{ pkgs, specialArgs, ... }:
+{
   home = {
     file = {
       # Folder that contains all Hyperland configuration

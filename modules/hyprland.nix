@@ -1,7 +1,8 @@
-{ inputs
-, pkgs
-, ...
-}: {
+{
+  pkgs,
+  ...
+}:
+{
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
@@ -22,7 +23,7 @@
     mako # the notification daemon, the same as dunst
 
     yad # a fork of zenity, for creating dialogs
-
+    xfce.thunar
     # audio
     alsa-utils # provides amixer/alsamixer/...
 
@@ -30,20 +31,14 @@
     mpc-cli # command-line mpd client
     ncmpcpp # a mpd client with a UI
     networkmanagerapplet # provide GUI app: nm-connection-editor
-    xfce.thunar # xfce4's file manager
     sddm-chili-theme
+    #hyprpanel
   ];
 
   programs = {
     hyprland.enable = true;
     # monitor backlight control
     light.enable = true;
-    # This is part of the GUI programs! TODO remove this
-    # thunar file manager(part of xfce) related options
-    thunar.plugins = with pkgs.xfce; [
-      thunar-archive-plugin
-      thunar-volman
-    ];
 
   };
 
@@ -52,25 +47,16 @@
       enable = true;
 
       desktopManager = {
-        xterm.enable = false; #Set xterm as desktopManager (everything handle by hyperland)
+        xterm.enable = false; # Set xterm as desktopManager (everything handle by hyperland)
       };
     };
     #For now I'm using this config to use hyprland. I wanna change to Sddm instead.
     displayManager = {
       defaultSession = "hyprland";
       sddm.enable = true;
-      };
+    };
     gvfs.enable = true; # Mount, trash, and other functionalities
     tumbler.enable = true; # Thumbnail support for images
-
-    #displayManager = {
-    #  defaultSession = "hyprland";
-    #  
-    #  sddm = {
-    #    enable = true;
-    #    wayland.enable = true;
-    #  };
-    #};
 
   };
 

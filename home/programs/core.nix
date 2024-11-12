@@ -1,4 +1,5 @@
-{ pkgs, ... }: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
 
     # archives
@@ -14,9 +15,9 @@
     jq # A lightweight and flexible command-line JSON processor
     yq-go # yaml processer https://github.com/mikefarah/yq
     fzf # A command-line fuzzy finder
-    pandoc #file formater
+    pandoc # file formater
     which # A binary finder
-    tree # A director listing 
+    tree # A director listing
     gnused # GNU sed, string editor
     gawk # A GNU awk
     nnn # terminal file manager
@@ -29,29 +30,30 @@
     btop # Process
     lsof # Open file analysis
     sysstat # Performance monitoring tools
-    lm_sensors #Tools for reading hardware sensors
+    lm_sensors # Tools for reading hardware sensors
     pciutils
     usbutils
     hdparm
     dmidecode
-    helix # Modern vi alternative
     file
 
-    tmux # a terminal multiplexer
+    zellij # a terminal multiplexer
     nerdfonts # Fonts for everyone
     tldr
-    emacs
-    nixfmt-rfc-style #A formatter for Nix code, intended to easily apply a uniform style. TODO: change to nixfmt when enable
+    nixfmt-rfc-style # A formatter for Nix code, intended to easily apply a uniform style. TODO: change to nixfmt when enable
+
+    atuin
+    skim
   ];
 
-  programs.skim = {
-    # Fuzzy finder
-    enable = true;
-    enableBashIntegration = true;
-  };
+  #programs.skim = {
+  # Fuzzy finder
+  #  enable = true;
+  #  enableBashIntegration = true;
+  #};
 
-  programs.atuin = {
-    enable = true;
-  };
+  # programs.atuin = {
+  #  enable = true;
+  #};
 
 }

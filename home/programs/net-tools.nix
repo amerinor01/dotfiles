@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   home.packages = with pkgs; [
     mtr # A network diagnostic tool
     iperf3 # A tool to measure IP bandwidth using UDP or TCP
@@ -9,7 +10,5 @@
     nmap # A utility for network discovery and security auditing
     ipcalc # it is a calculator for the IPv4/v6 addresses
     ethtool # Controlling network drivers and hardware
-
   ];
-
 }

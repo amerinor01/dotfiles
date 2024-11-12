@@ -1,6 +1,7 @@
-{ lib
-, pkgs
-, ...
+{
+  lib,
+  pkgs,
+  ...
 }:
 {
 
@@ -9,7 +10,6 @@
   #  NixOS's core configuration suitable for all my machines
   #
   ###################################################################################
-
   # for nix server, we do not need to keep too much generations
   boot.loader.systemd-boot.configurationLimit = lib.mkDefault 10;
   # boot.loader.grub.configurationLimit = 10;
@@ -25,11 +25,13 @@
     };
   };
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = lib.mkDefault true;
-
   # Set your time zone.
   time.timeZone = "Europe/Madrid";
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Select internationalisation properties.
   i18n = {
@@ -46,9 +48,6 @@
       LC_TIME = "en_US.UTF-8";
     };
   };
-
-  # Disable the firewall altogether.
-  networking.firewall.enable = lib.mkDefault false;
 
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
@@ -93,8 +92,6 @@
     };
 
   };
-
-
 
   # Enable zsh at system level
   programs.zsh.enable = true;

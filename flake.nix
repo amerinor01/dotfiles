@@ -3,7 +3,10 @@
 
   # the nixConfig here only affects the flake itself, not the system configuration!
   nixConfig = {
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   # This is the standard format for flake.nix. `inputs` are the dependencies of the flake,
@@ -13,7 +16,7 @@
     nixpkgs.url = "nixpkgs/nixos-24.05";
 
     # Also add the Nixpkgs unstable for some updated packages
-    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
+    #nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     # Set the hardware configurations
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -29,7 +32,7 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-   
+
     # Also functionallity from most of hyprland such the screenshot tools...
     hyprwm-contrib = {
       url = "github:hyprwm/contrib";
@@ -37,10 +40,13 @@
     };
 
     # community wayland nixpkgs
-    nixpkgs-wayland.url = "github:nix-community/nixpkgs-wayland";
+    nixpkgs-wayland = {
+      url = "github:nix-community/nixpkgs-wayland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # TODO Set secrets management for the future
-    sops-nix.url = "github:Mic92/sops-nix";
+    # sops-nix.url = "github:Mic92/sops-nix";
 
     #File to block most of the stuff avoidable online
     hosts.url = "github:StevenBlack/hosts";
@@ -50,7 +56,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    
+    nixvim.url = "github:elythh/nixvim";
+
   };
 
   # The `outputs` function will return all the build results of the flake.
@@ -59,16 +66,20 @@
   # However, `self` is an exception, this special parameter points to the `outputs` itself (self-reference)
   # The `@` syntax here is used to alias the attribute set of the inputs's parameter, making it convenient to use inside the function.
   outputs =
-    inputs @ { self
-    , nixpkgs
-    , home-manager
-    , sops-nix
-    , hosts
-    , autofirma-nix
-    , ...
+    inputs@{
+      nixpkgs,
+      home-manager,
+      hosts,
+      autofirma-nix,
+      nixvim,
+      ...
     }:
     let
-      commonHomeManager = { user, importPath, specialArgs }:
+      commonHomeManager =
+        {
+          user,
+          importPath,
+        }:
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -85,56 +96,42 @@
           system = x64_system;
           config.allowUnfree = true;
         };
-#        autofirma = autofirma-nix.homeManagerModules.default;
 
-      }
-      // inputs;
-      # Set the laptop configuration
-      laptop_modules = [
-        ./hosts/laptop
-        ./modules/hyprland.nix
-        ./modules/containers
+      } // inputs;
 
-        home-manager.nixosModules.home-manager
-        (commonHomeManager {
-          user = "amerino";
-          importPath = ./home/hyperland-desktop.nix;
-          specialArgs = x64_specialArgs;
-        })
-
-      ];
       server_modules = [
         ./hosts/server
         ./modules/hyprland.nix
-        sops-nix.nixosModules.sops
+        #       sops-nix.nixosModules.sops
         hosts.nixosModule
-        # This is awfull, let me fix later on.
-        autofirma-nix.nixosModules.default
-        ({ pkgs, config, ...}: {
-          programs.autofirma.enable = true;
-          programs.autofirma.fixJavaCerts = true;
-          programs.autofirma.firefoxIntegration.enable = true;
-          
-          programs.configuradorfnmt.enable = true;
-          programs.configuradorfnmt.firefoxIntegration.enable = true;
-
-          programs.firefox.enable = true;
-          programs.firefox.policies = {
-            SecurityDevices = {
-              "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
-            };
-          };
-        })
-        {
-          networking.stevenBlackHosts.enable = true;
-        }
-
+        nixvim.
         #Home Manager config
         home-manager.nixosModules.home-manager
         (commonHomeManager {
           user = "amerino";
           importPath = ./home/desktop-hyprland.nix;
-          specialArgs = x64_specialArgs;
+          # specialArgs = x64_specialArgs;
+        })
+      ];
+
+      zen_modules = [
+        ./hosts/zen
+        ./modules/hyprland.nix
+
+        autofirma-nix.nixosModules.default
+        ./modules/autofirma.nix
+
+        #sops-nix.nixosModules.sops
+        hosts.nixosModule
+        {
+          networking.stevenBlackHosts.enable = true;
+        }
+        #Home Manager config
+        home-manager.nixosModules.home-manager
+        (commonHomeManager {
+          user = "amerino";
+          importPath = ./home/desktop-hyprland.nix;
+          #  specialArgs = x64_specialArgs;
         })
 
       ];
@@ -146,13 +143,13 @@
           specialArgs = x64_specialArgs;
         in
         {
-          laptop = nixpkgs.lib.nixosSystem {
-            inherit system specialArgs;
-            modules = laptop_modules;
-          };
           server = nixpkgs.lib.nixosSystem {
             inherit system specialArgs;
             modules = server_modules;
+          };
+          zen = nixpkgs.lib.nixosSystem {
+            inherit system specialArgs;
+            modules = zen_modules;
           };
 
         };

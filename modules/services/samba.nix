@@ -1,6 +1,6 @@
 {
   services.samba = {
-    enable = true;
+    enable = false;
     securityType = "user";
     extraConfig = ''
       workgroup = WORKGROUP

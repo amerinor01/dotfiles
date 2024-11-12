@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   ...
 }:
 # processing audio/video
@@ -13,7 +12,6 @@
     imagemagick
     graphviz
     #imv # simple image viewer
-
     # video
     #ivlc
 

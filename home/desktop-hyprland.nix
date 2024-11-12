@@ -1,4 +1,4 @@
-{self, ...}:
+{self, autofirma,  ...}:
 let name = "amerino";
 in
 {
@@ -7,12 +7,16 @@ in
     ./desktop
     ./hyprland
     ./programs
+    # ./autofirma.nix
   ];
+#    home.packages = with autofirma; [
+#    autofirma
+#  ];
 
   home = {
     username = name;
     homeDirectory = "/home/${name}";
-    stateVersion = "23.05";
+    stateVersion = "24.05";
   };
   
   # Let Home Manager install and manage itself.
