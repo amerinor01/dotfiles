@@ -42,8 +42,11 @@
     tldr
     nixfmt-rfc-style # A formatter for Nix code, intended to easily apply a uniform style. TODO: change to nixfmt when enable
 
-    atuin
     skim
+
+    kitty
+
+    macchina
   ];
 
   #programs.skim = {
@@ -52,8 +55,8 @@
   #  enableBashIntegration = true;
   #};
 
-  # programs.atuin = {
-  #  enable = true;
-  #};
+  programs.atuin = {
+    enable = true;
+  };
 
 }

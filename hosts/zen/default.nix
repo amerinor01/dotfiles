@@ -29,12 +29,9 @@
     ];
 
     loader = {
-      systemd-boot.enable = true; # Use the GRUB 2 boot loader.
+      systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       systemd-boot.configurationLimit = 10;
     };
   };
-  nixpkgs.config.allowUnfree = true;
-
-  system.stateVersion = "24.05";
 }

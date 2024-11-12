@@ -27,24 +27,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Modern WM with wayland
-    hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Also functionallity from most of hyprland such the screenshot tools...
-    hyprwm-contrib = {
-      url = "github:hyprwm/contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # community wayland nixpkgs
-    nixpkgs-wayland = {
-      url = "github:nix-community/nixpkgs-wayland";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # TODO Set secrets management for the future
     # sops-nix.url = "github:Mic92/sops-nix";
 
@@ -71,7 +53,6 @@
       home-manager,
       hosts,
       autofirma-nix,
-      nixvim,
       ...
     }:
     let
@@ -100,13 +81,15 @@
       } // inputs;
 
       server_modules = [
-        ./hosts/server
-        ./modules/hyprland.nix
-        #       sops-nix.nixosModules.sops
         hosts.nixosModule
-        nixvim.
-        #Home Manager config
         home-manager.nixosModules.home-manager
+        #autofirma-nix.nixosModules.default
+        #sops-nix.nixosModules.sops
+
+        ./hosts/server
+        #./modules/autofirma.nix
+
+        #Home Manager config
         (commonHomeManager {
           user = "amerino";
           importPath = ./home/desktop-hyprland.nix;
@@ -118,7 +101,7 @@
         ./hosts/zen
         ./modules/hyprland.nix
 
-        autofirma-nix.nixosModules.default
+        autofirma-nix.nixosModules
         ./modules/autofirma.nix
 
         #sops-nix.nixosModules.sops

@@ -10,8 +10,6 @@
   #  NixOS's core configuration suitable for all my machines
   #
   ###################################################################################
-  # for nix server, we do not need to keep too much generations
-  boot.loader.systemd-boot.configurationLimit = lib.mkDefault 10;
   # boot.loader.grub.configurationLimit = 10;
   # do garbage collection weekly to keep disk usage low
   nix = {
@@ -22,16 +20,17 @@
     };
     settings = {
       auto-optimise-store = true;
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
   };
 
   # Set your time zone.
   time.timeZone = "Europe/Madrid";
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nixpkgs.config.allowUnfree = true;
 
   # Select internationalisation properties.
   i18n = {
@@ -57,8 +56,6 @@
     git # used by nix flakes
     bash
     zsh
-    rar
-    searxng
     sddm-chili-theme
   ];
   # replace default editor with neovim
@@ -70,29 +67,9 @@
     power-profiles-daemon.enable = true;
     upower.enable = true;
 
-    openssh = {
-      enable = true;
-      settings = {
-        X11Forwarding = true;
-        PermitRootLogin = "no"; # disable root login
-        PasswordAuthentication = true; # disable password login
-      };
-      openFirewall = false;
-    };
-
-    searx = {
-      enable = true;
-      settings = {
-        server = {
-          port = 8888;
-          bind_address = "127.0.0.1";
-          secret_key = "foo";
-        };
-      };
-    };
-
   };
 
+  system.stateVersion = "24.04";
   # Enable zsh at system level
   programs.zsh.enable = true;
 

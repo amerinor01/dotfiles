@@ -5,7 +5,7 @@ show=drun
 prompt=Apps
 normal_window=true
 layer=top
-term=alacritty
+term=kitty
 
 ## Geometry
 width=500px
